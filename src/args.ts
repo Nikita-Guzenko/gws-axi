@@ -18,8 +18,6 @@ export interface ParsedArgs {
   passthrough: string[];
 }
 
-const VALUE_FLAGS = new Set(['--params', '--id', '--format']);
-
 export function parseArgs(argv: string[]): ParsedArgs {
   const out: ParsedArgs = { path: [], raw: false, help: false, passthrough: [] };
 
@@ -55,11 +53,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
         break;
       default:
         // Unknown flag/value: forward verbatim (preserves full gws surface).
-        if (VALUE_FLAGS.has(tok)) {
-          out.passthrough.push(tok, argv[++i]);
-        } else {
-          out.passthrough.push(tok);
-        }
+        out.passthrough.push(tok);
     }
   }
 
@@ -89,6 +83,11 @@ export function buildGwsArgv(
     }
     if (Object.keys(merged).length > 0) {
       argv.push('--params', JSON.stringify(merged));
+    }
+    // No idParam resolved for this path: forward --id verbatim so gws can
+    // accept or reject it rather than silently dropping the user's target.
+    if (parsed.id !== undefined && !opts.idParam) {
+      argv.push('--id', parsed.id);
     }
   }
 

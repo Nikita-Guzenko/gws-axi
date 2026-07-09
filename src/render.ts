@@ -72,7 +72,7 @@ export function renderList(arr: unknown[], name: string, columns?: string[]): st
   if (Array.isArray(first)) {
     const header = `${name}[${arr.length}]:`;
     const rows = shown.map((row) => '  ' + (row as unknown[]).map((c) => csvCell(formatScalar(c))).join(','));
-    return trailer(header, rows, arr.length, name);
+    return trailer(header, rows, arr.length);
   }
 
   // Array of objects: columns header + one line each.
@@ -82,20 +82,19 @@ export function renderList(arr: unknown[], name: string, columns?: string[]): st
     const rows = shown.map(
       (item) => '  ' + cols.map((c) => csvCell(formatScalar(getPath(item, c)))).join(','),
     );
-    return trailer(header, rows, arr.length, name);
+    return trailer(header, rows, arr.length);
   }
 
   // Array of scalars.
   const header = `${name}[${arr.length}]:`;
   const rows = shown.map((v) => '  ' + csvCell(formatScalar(v)));
-  return trailer(header, rows, arr.length, name);
+  return trailer(header, rows, arr.length);
 }
 
-function trailer(header: string, rows: string[], total: number, name: string): string {
+function trailer(header: string, rows: string[], total: number): string {
   const out = [header, ...rows];
   if (total === 0) out.push('  (none)');
   if (total > MAX_ITEMS) out.push(`  … +${total - MAX_ITEMS} more (--raw for all)`);
-  void name;
   return out.join('\n');
 }
 

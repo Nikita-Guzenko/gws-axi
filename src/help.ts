@@ -18,7 +18,7 @@ export function buildHelpLines(path: string[], data: unknown): string[] {
     const token = data['nextPageToken'] ?? data['nextSyncToken'];
     if (typeof token === 'string' && token) {
       const key = data['nextPageToken'] ? 'pageToken' : 'syncToken';
-      lines.push(`Pass --params '{"${key}":"${short(token)}"}' for the next page`);
+      lines.push(`Pass --params '{"${key}":"${token}"}' for the next page`);
     }
   }
 
@@ -42,8 +42,4 @@ export function formatHelp(lines: string[]): string {
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return v !== null && typeof v === 'object' && !Array.isArray(v);
-}
-
-function short(s: string): string {
-  return s.length > 16 ? s.slice(0, 15) + '…' : s;
 }

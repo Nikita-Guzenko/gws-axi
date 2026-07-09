@@ -25,7 +25,7 @@ export function runGws(argv: string[], binary = 'gws'): GwsResult {
   return {
     stdout: res.stdout ?? '',
     stderr: res.stderr ?? '',
-    code: res.status ?? 0,
+    code: res.status ?? (res.signal ? 1 : 0),
     notFound: false,
   };
 }

@@ -77,3 +77,21 @@ test('malformed --params JSON is forwarded verbatim (not swallowed)', () => {
   const { argv } = buildGwsArgv(p, { defaults: { pageSize: 20 } });
   assert.equal(argv[argv.indexOf('--params') + 1], '{bad json');
 });
+
+test('malformed --params still forwards --id verbatim (never dropped)', () => {
+  const p = parseArgs(['drive', 'files', 'get', '--id', 'FILE1', '--params', '{bad json']);
+  const idParam = resolveIdParam(p.path);
+  const { argv } = buildGwsArgv(p, { idParam });
+  assert.equal(argv[argv.indexOf('--params') + 1], '{bad json');
+  assert.equal(argv[argv.indexOf('--id') + 1], 'FILE1');
+});
+
+test('valid-but-non-object --params (array/scalar) is forwarded verbatim, not swallowed', () => {
+  const arr = parseArgs(['drive', 'files', 'list', '--params', '[1,2]']);
+  const { argv: a1 } = buildGwsArgv(arr, { defaults: { pageSize: 20 } });
+  assert.equal(a1[a1.indexOf('--params') + 1], '[1,2]');
+
+  const scalar = parseArgs(['drive', 'files', 'list', '--params', '42']);
+  const { argv: a2 } = buildGwsArgv(scalar, { defaults: { pageSize: 20 } });
+  assert.equal(a2[a2.indexOf('--params') + 1], '42');
+});

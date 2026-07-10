@@ -76,6 +76,11 @@ export function buildGwsArgv(
     // Malformed JSON: forward verbatim so gws emits its own validation error
     // rather than silently swallowing the user's input.
     argv.push('--params', parsed.params as string);
+    // Can't merge --id into malformed params; forward it verbatim so gws still
+    // sees the target rather than silently dropping it.
+    if (parsed.id !== undefined) {
+      argv.push('--id', parsed.id);
+    }
   } else {
     const merged: Record<string, unknown> = { ...(opts.defaults ?? {}), ...userParams };
     if (parsed.id !== undefined && opts.idParam) {
@@ -97,12 +102,17 @@ export function buildGwsArgv(
   return { argv, format };
 }
 
-/** Returns the parsed object, {} if none given, or null if the JSON is malformed. */
+/**
+ * Returns the parsed object, or {} when no --params was given. Returns null for
+ * anything gws can't accept as a params object — malformed JSON OR valid-but-
+ * non-object JSON (arrays, scalars) — so the caller forwards the raw string
+ * verbatim and gws rejects it loudly instead of silently swallowing intent.
+ */
 function safeParseObject(s?: string): Record<string, unknown> | null {
   if (!s) return {};
   try {
     const v = JSON.parse(s);
-    return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
+    return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
   } catch {
     return null;
   }

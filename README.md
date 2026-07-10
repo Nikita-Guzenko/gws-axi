@@ -29,7 +29,6 @@ Every `-axi` tool shares the same house style:
   files[2]{id,name,mimeType,modifiedTime,size}:
     1a,Report.pdf,application/pdf,2026-06-01T10:00:00Z,20481
     2b,notes,application/vnd.google-apps.document,2026-06-02T11:00:00Z,
-  nextPageToken: CFG_TOKEN_abc123
   help[3]:
     Run gws-axi drive files get --id <id> to view a file
     Filter with --params '{"q":"name contains \"report\""}'

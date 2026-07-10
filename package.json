@@ -1,0 +1,44 @@
+{
+  "name": "gws-axi",
+  "version": "0.1.0",
+  "description": "Agent-ergonomic wrapper around the gws Google Workspace CLI. Compact, structured output for AI agents.",
+  "type": "module",
+  "bin": {
+    "gws-axi": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --import tsx --test test/*.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "gws",
+    "google-workspace",
+    "cli",
+    "agent",
+    "wrapper",
+    "axi"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nikita-Guzenko/gws-axi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nikita-Guzenko/gws-axi/issues"
+  },
+  "homepage": "https://github.com/Nikita-Guzenko/gws-axi#readme",
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

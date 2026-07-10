@@ -39,12 +39,9 @@ function renderObjectOrList(obj: Record<string, unknown>, opts: RenderOptions): 
       ? pickItemsArray(obj, undefined)
       : null;
   if (items) {
-    const lines = [renderList(items.value, items.key, opts.columns)];
-    // Surface pagination/meta so an agent can continue without --raw.
-    for (const mk of ['nextPageToken', 'nextSyncToken']) {
-      if (typeof obj[mk] === 'string' && obj[mk]) lines.push(`${mk}: ${truncate(obj[mk] as string)}`);
-    }
-    return lines.join('\n');
+    // Pagination tokens are surfaced (in full) by the help[] trailer, so the
+    // list body stays token-lean and never shows a truncated, unusable token.
+    return renderList(items.value, items.key, opts.columns);
   }
   return renderObject(obj, opts.label ?? 'result');
 }

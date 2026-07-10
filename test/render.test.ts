@@ -21,8 +21,8 @@ test('drive files list → header[N]{fields}: + per-item lines', () => {
   assert.equal(lines[1], '  1a,Report.pdf,application/pdf,t1,20');
   // missing field renders as empty trailing cell
   assert.equal(lines[2], '  2b,notes,application/vnd.google-apps.document,t2,');
-  // pagination token surfaced
-  assert.ok(out.includes('nextPageToken: TOK'));
+  // pagination token is NOT in the list body (help[] trailer carries it in full)
+  assert.ok(!out.includes('nextPageToken'));
 });
 
 test('meta keys (kind/etag) are never chosen as the items array', () => {

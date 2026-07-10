@@ -23,7 +23,8 @@ test('compact render + help trailer for a list', () => {
   const { stdout, code } = run(['drive', 'files', 'list']);
   assert.equal(code, 0);
   assert.match(stdout, /^files\[2\]\{id,name,mimeType,modifiedTime,size\}:/m);
-  assert.match(stdout, /nextPageToken: TOK123/);
+  assert.doesNotMatch(stdout, /^nextPageToken:/m);
+  assert.match(stdout, /"pageToken":"TOK123"/);
   assert.match(stdout, /^help\[\d\]:/m);
 });
 
